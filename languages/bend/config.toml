@@ -1,5 +1,5 @@
 name = "Bend"
-grammar = "bend"
+grammar = "bend2"
 path_suffixes = ["bend"]
 line_comments = ["#"]
 autoclose_before = ";:.,=}])>"

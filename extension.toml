@@ -1,11 +1,11 @@
 id = "bend"
 name = "Bend"
-version = "0.0.1"
+version = "0.1.0"
 schema_version = 1
 authors = ["Pedro Braga <mrhenribraga@gmail.com>"]
-description = "Bend support."
+description = "Bend 2 support."
 repository = "https://github.com/your-name/my-zed-extension"
 
-[grammars.bend]
-repository = "https://github.com/LaBatata101/tree-sitter-bend.git"
-commit = "0e8a2c89fa2b2e19b07a2a7e11f1ebf0f7323eba"
+[grammars.bend2]
+repository = "https://github.com/Soulthym/tree-sitter-bend2.git"
+rev = "997ec087147eb996731cc542ab4931b97049d2a1"

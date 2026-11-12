@@ -1,125 +1,57 @@
+; Adapted from queries/highlights.scm in https://github.com/Soulthym/tree-sitter-bend2
+; at 997ec087147eb996731cc542ab4931b97049d2a1 (MIT License, Copyright (c) Thybault Alabarbe).
+; Capture names Zed themes do not style are mapped to ones they do.
+
+; General names first; structural roles below override them.
 (identifier) @variable
-
-(fun_function_definition
-  name: (identifier) @function)
-(imp_function_definition
-  name: (identifier) @function)
-(parameters) @variable.parameter
-
-(object_definition
-  name: (identifier) @type)
-(object_field
-  (identifier) @variable.member)
-
-(imp_type_definition
-  name: (identifier) @type)
-(imp_type_constructor
-  (identifier) @constructor)
-(imp_type_constructor_field
-  (identifier) @variable.member)
-
-(fun_type_definition
-  name: (identifier) @type)
-(fun_type_constructor
-  (identifier) @constructor)
-(fun_type_constructor_fields
-  (identifier) @variable.member)
-
-(constructor
-  (identifier) @constructor)
-(constructor
-  field: (identifier) @property)
-
-(call_expression
-  (identifier) @function.call)
-
-(switch_case
-  (switch_pattern) @character.special
-  (#eq? @character.special "_"))
-
-(integer) @number
-(float) @number.float
-
-(character) @character
+((identifier) @type
+  (#match? @type "^[A-Z]"))
 (comment) @comment
-[
- (symbol)
- (string)
-] @string
+(string) @string
+(character) @string
+(escape_sequence) @string.escape
+(integer) @number
+(natural) @number
+(float) @number.float
+(quantity) @constant.builtin
+(builtin_type) @type.builtin
+"Kind" @type.builtin
+(hole) @variable.special
+(reflexivity) @constant.builtin
 
-[
-  ":"
-  ","
-  ";"
-] @punctuation.delimiter
+(function_definition name: (identifier) @function)
+(law_definition name: (identifier) @function)
+(type_definition name: (identifier) @type.definition)
+(constructor_definition name: (identifier) @constructor)
+(constructor_expression name: (identifier) @constructor)
+(eliminator_arm name: (identifier) @constructor)
+(type_application name: (identifier) @type)
+(call_expression function: (identifier) @function.call)
+(do_expression monad: (identifier) @type)
+(parameter name: (identifier) @variable.parameter)
+(type_parameter name: (identifier) @variable.parameter)
+(constructor_definition (type_parameter name: (identifier) @property))
+(law_clause name: (identifier) @variable.parameter)
+(dependent_type name: (identifier) @variable.parameter)
+(lambda_expression parameter: (identifier) @variable.parameter)
+(lambda_expression parameter: (reusable_expression (identifier) @variable.parameter))
+(lambda_expression parameter: (parenthesized_expression body: (body (identifier) @variable.parameter)))
+(lambda_expression parameter: (parenthesized_expression body: (body (reusable_expression (identifier) @variable.parameter))))
+(do_binding name: (identifier) @variable)
+(import_statement alias: (module_alias) @namespace)
+(import_path) @string.special.path
+(foreign_import path: (string) @string.special.path)
+(decorator) @attribute
+(function_definition "?" @attribute)
+(gpu_call "!" @keyword.modifier)
 
-[
-  "["
-  "]"
-  "("
-  ")"
-  "{"
-  "}"
-] @punctuation.bracket
-
-[
-  "-"
-  "-="
-  "!="
-  "*"
-  "**"
-  "*="
-  "/"
-  "/="
-  "&"
-  "%"
-  "^"
-  "+"
-  "+="
-  "<"
-  "="
-  "=="
-  ">"
-  "|"
-  "~"
-  "&"
-  "<-"
-] @operator
-
-[
-  "if"
-  "elif"
-  "else"
-] @keyword.conditional
-
-
-[
- "def"
-  "@"
-  "λ"
-  "lambda"
-] @keyword.function
-
+["def" "type" "law" "is" "where" "for" "exs" "do"] @keyword
+["match" "case"] @keyword.conditional
 "return" @keyword.return
-"for" @keyword.repeat
-
-[
-  "object"
-  "type"
-] @keyword.type
-
-[
-  "with"
-  "match"
-  "case"
-  "open"
-  "use"
-  "do"
-  "bend"
-  "when"
-  "fold"
-  "switch"
-  "ask"
-  "let"
-  "in"
-] @keyword
+["import" "as"] @keyword.import
+"Base" @namespace
+["(" ")" "[" "]" "{" "}"] @punctuation.bracket
+["," ";" ":"] @punctuation.delimiter
+["->" "=>" "<-" "=" "==" "!=" "@" "\\" "~"
+ "+" "-" "*" "/" "%" "<" ">" "<=" ">=" "<<" ">>"
+ "&" "|" "&&" "||" "<>" "++" "<&>" ".&." ".|." ".^." "^"] @operator
